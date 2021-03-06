@@ -1050,6 +1050,11 @@ class SafariBooks:
 
 # MAIN
 if __name__ == "__main__":
+    if sys.argv[1] == "--version":
+        sys.stdout.write("0.0.1\n")
+        sys.stdout.flush()
+        sys.exit(0)
+
     arguments = argparse.ArgumentParser(prog="safaribooks.py",
                                         description="Download and generate an EPUB of your favorite books"
                                                     " from Safari Books Online.",
@@ -1096,11 +1101,6 @@ if __name__ == "__main__":
     )
 
     args_parsed = arguments.parse_args()
-
-    if args_parsed.version:
-        sys.stdout.write("0.0.1\n")
-        sys.stdout.flush()
-        sys.exit(0)
 
     if args_parsed.cred or args_parsed.login:
         user_email = ""
