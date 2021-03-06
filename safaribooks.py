@@ -59,7 +59,8 @@ class Display:
         logs_handler.setLevel(logging.INFO)
         self.logger.addHandler(logs_handler)
 
-        self.columns, _ = shutil.get_terminal_size()
+        #self.columns, _ = shutil.get_terminal_size()
+        self.columns = 65
 
         self.logger.info("** Welcome to SafariBooks! **")
 
@@ -138,20 +139,20 @@ class Display:
 
     def intro(self):
         output = self.SH_YELLOW + ("""
-       ____     ___         _     
-      / __/__ _/ _/__ _____(_)    
-     _\ \/ _ `/ _/ _ `/ __/ /     
-    /___/\_,_/_/ \_,_/_/ /_/      
-      / _ )___  ___  / /__ ___    
-     / _  / _ \/ _ \/  '_/(_-<    
-    /____/\___/\___/_/\_\/___/    
+       ____     ___         _
+      / __/__ _/ _/__ _____(_)
+     _\ \/ _ `/ _/ _ `/ __/ /
+    /___/\_,_/_/ \_,_/_/ /_/
+      / _ )___  ___  / /__ ___
+     / _  / _ \/ _ \/  '_/(_-<
+    /____/\___/\___/_/\_\/___/
 """ if random() > 0.5 else """
- ██████╗     ██████╗ ██╗  ██╗   ██╗██████╗ 
+ ██████╗     ██████╗ ██╗  ██╗   ██╗██████╗
 ██╔═══██╗    ██╔══██╗██║  ╚██╗ ██╔╝╚════██╗
 ██║   ██║    ██████╔╝██║   ╚████╔╝   ▄███╔╝
-██║   ██║    ██╔══██╗██║    ╚██╔╝    ▀▀══╝ 
-╚██████╔╝    ██║  ██║███████╗██║     ██╗   
- ╚═════╝     ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝                                           
+██║   ██║    ██╔══██╗██║    ╚██╔╝    ▀▀══╝
+╚██████╔╝    ██║  ██║███████╗██║     ██╗
+ ╚═════╝     ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝
 """) + self.SH_DEFAULT
         output += "\n" + "~" * (self.columns // 2)
 
@@ -160,7 +161,7 @@ class Display:
     def parse_description(self, desc):
         if not desc:
             return "n/d"
-        
+
         try:
             return html.fromstring(desc).text_content()
 
@@ -322,6 +323,9 @@ class SafariBooks:
         self.session.headers.update(self.HEADERS)
 
         self.jwt = {}
+
+        if args.destination:
+            PATH = args.destination
 
         if not args.cred:
             if not os.path.isfile(COOKIES_FILE):
@@ -540,7 +544,7 @@ class SafariBooks:
 
         if "last_chapter_read" in response:
             del response["last_chapter_read"]
-            
+
         for key, value in response.items():
             if value is None:
                 response[key] = 'n/a'
@@ -1057,6 +1061,10 @@ if __name__ == "__main__":
         "--cred", metavar="<EMAIL:PASS>", default=False,
         help="Credentials used to perform the auth login on Safari Books Online."
              " Es. ` --cred \"account_mail@mail.com:password01\" `."
+    )
+    arguments.add_argument(
+        "--destination", metavar="<FULL PATH TO DOWNLOAD FOLDER>", default=False,
+        help="Full path to where to save downloaded media,"
     )
     login_arg_group.add_argument(
         "--login", action='store_true',
