@@ -1063,8 +1063,12 @@ if __name__ == "__main__":
              " Es. ` --cred \"account_mail@mail.com:password01\" `."
     )
     arguments.add_argument(
-        "--destination", metavar="<FULL PATH TO DOWNLOAD FOLDER>", default=False,
+        "--destination", metavar="<Full path to download folder>", default=False,
         help="Full path to where to save downloaded media,"
+    )
+    arguments.add_argument(
+        "--version",  dest="version", action='store_true',
+        help="Print version information,"
     )
     login_arg_group.add_argument(
         "--login", action='store_true',
@@ -1092,6 +1096,12 @@ if __name__ == "__main__":
     )
 
     args_parsed = arguments.parse_args()
+
+    if args_parsed.version:
+        sys.stdout.write("0.0.1\n")
+        sys.stdout.flush()
+        sys.exit(0)
+
     if args_parsed.cred or args_parsed.login:
         user_email = ""
         pre_cred = ""
