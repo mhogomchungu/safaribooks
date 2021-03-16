@@ -47,10 +47,10 @@ class Display:
     SH_BG_RED = "\033[41m" if "win" not in sys.platform else ""
     SH_BG_YELLOW = "\033[43m" if "win" not in sys.platform else ""
 
-    def __init__(self, log_file):
+    def __init__(self, path,log_file):
         self.output_dir = ""
         self.output_dir_set = False
-        self.log_file = os.path.join(PATH, log_file)
+        self.log_file = os.path.join(path, log_file)
 
         self.logger = logging.getLogger("SafariBooks")
         self.logger.setLevel(logging.INFO)
@@ -311,8 +311,11 @@ class SafariBooks:
     COOKIE_FLOAT_MAX_AGE_PATTERN = re.compile(r'(max-age=\d*\.\d*)', re.IGNORECASE)
 
     def __init__(self, args):
+        if args.destination:
+            PATH = args.destination
+
         self.args = args
-        self.display = Display("info_%s.log" % escape(args.bookid))
+        self.display = Display(PATH,"info_%s.log" % escape(args.bookid))
         self.display.intro()
 
         self.session = requests.Session()
@@ -323,9 +326,6 @@ class SafariBooks:
         self.session.headers.update(self.HEADERS)
 
         self.jwt = {}
-
-        if args.destination:
-            PATH = args.destination
 
         if not args.cred:
             if not os.path.isfile(COOKIES_FILE):
