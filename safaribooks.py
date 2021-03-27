@@ -1051,7 +1051,7 @@ class SafariBooks:
 # MAIN
 if __name__ == "__main__":
     if len(sys.argv) == 2  and sys.argv[1] == "--version":
-        sys.stdout.write("0.0.1\n")
+        sys.stdout.write("0.0.2\n")
         sys.stdout.flush()
         sys.exit(0)
 
